@@ -2,17 +2,11 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -23,7 +17,7 @@ class UserControllerTests {
      * UserController проверка на POST и GET запросы
      */
     @Test
-    public void testUserController_GetAll() {
+    public void shouldPostUserAndGetAllUsers() {
         UserController userController = new UserController();
         User user1 = new User(1,"name1@mail.ru","name1","name1", LocalDateTime.of(2000,1,15,0,0));
         userController.create(user1);
@@ -54,7 +48,7 @@ class UserControllerTests {
      * UserController проверка на PATCH запрос
      */
     @Test
-    public void testUserController_Patch() {
+    public void shouldPatchUserAndReturnPatchedUser() {
         UserController userController = new UserController();
         User user1 = new User(1, "name1@mail.ru", "name1", "name1", LocalDateTime.of(2000, 1, 15, 0, 0));
         userController.create(user1);

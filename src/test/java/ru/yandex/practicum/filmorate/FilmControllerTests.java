@@ -28,7 +28,7 @@ class FilmControllerTests {
 	 * FilmController проверка на POST и GET запросы
 	 */
 	@Test
-	public void testFilmController_GetAll() {
+	public void shouldPostFilmAndGetAllFilms() {
 		FilmController filmController = new FilmController();
 		Film film1 = new Film(1,"Name","duration", LocalDateTime.of(2018,1,1,0,0), Duration.ofMinutes(90));
 	    filmController.create(film1);
@@ -59,7 +59,7 @@ class FilmControllerTests {
 	 * FilmController проверка на PATCH запрос
 	 */
 	@Test
-	public void testFilmController_Patch() {
+	public void shouldPatchFilmAndReturnPatchedFilm() {
 		FilmController filmController = new FilmController();
 		Film film1 = new Film(1,"Name","duration", LocalDateTime.of(2018,1,1,0,0), Duration.ofMinutes(90));
 		filmController.create(film1);
