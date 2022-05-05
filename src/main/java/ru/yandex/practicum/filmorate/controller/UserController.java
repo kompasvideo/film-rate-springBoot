@@ -21,7 +21,7 @@ public class UserController {
         return users;
     }
 
-    @PostMapping(value = "/user")
+    @PostMapping(value = "/users")
     public User create(@Valid @RequestBody User user) {
         try {
             user.validation();
@@ -34,8 +34,8 @@ public class UserController {
         return user;
     }
 
-    @PatchMapping(value = "/user")
-    public User patch(@Valid @RequestBody User user) {
+    @PutMapping(value = "/users")
+    public User put(@Valid @RequestBody User user) {
         try {
             for (User lUser: users) {
                 if(lUser.getId() == user.getId()) {

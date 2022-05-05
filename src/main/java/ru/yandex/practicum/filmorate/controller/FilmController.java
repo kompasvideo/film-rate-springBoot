@@ -21,7 +21,7 @@ public class FilmController {
         return films;
     }
 
-    @PostMapping(value = "/film")
+    @PostMapping(value = "/films")
     public Film create(@Valid @RequestBody Film film) {
         try {
             film.validation();
@@ -34,15 +34,15 @@ public class FilmController {
         return film;
     }
 
-    @PatchMapping(value = "/film")
-    public Film patch(@Valid @RequestBody Film film) {
+    @PutMapping(value = "/films")
+    public Film put(@Valid @RequestBody Film film) {
         try {
             for (Film lFilm: films) {
                 if(lFilm.getId() == film.getId()) {
                     film.validation();
                     lFilm.setName(film.getName());
                     lFilm.setDescription(film.getDescription());
-                    lFilm.setReliaseDate(film.getReliaseDate());
+                    lFilm.setReleaseDate(film.getReleaseDate());
                     lFilm.setDuration(film.getDuration());
                     log.info("Обновлена запись о фильме: {}", film);
                 }

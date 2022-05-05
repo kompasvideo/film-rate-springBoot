@@ -1,33 +1,30 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
-import lombok.NonNull;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import javax.validation.constraints.Min;
+
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeParseException;
 
 @Data
 public class Film {
+    private static int  index = 1;
     private int id;
     @NotEmpty
     private String name;
     @Size(max = 200)
     private String description;
-    @Past
-    private LocalDateTime reliaseDate;
-    @Min(0)
-    private Duration duration;
+    private String releaseDate;
+    private int duration;
 
-    public Film(int id, @NotEmpty String name, String description, LocalDateTime reliaseDate, Duration duration) {
-        this.id = id;
+    public Film(@NotEmpty String name, String description, String releaseDate, int duration) {
+        this.id = index++;
         this.name = name;
         this.description = description;
-        this.reliaseDate = reliaseDate;
+        this.releaseDate = releaseDate;
         this.duration = duration;
     }
 
@@ -38,11 +35,16 @@ public class Film {
         if (description.length() > 200) {
             throw new ValidationException("длина description больше 200 символов");
         }
-        LocalDateTime localDateTime = LocalDateTime.of(1895, Month.DECEMBER,28, 0,0);
-        if (reliaseDate.isBefore(localDateTime)){
+        LocalDate localDate = LocalDate.of(1895, Month.DECEMBER,28);
+        try {
+            LocalDate reliaseDate1 =LocalDate.parse(releaseDate);
+        if (reliaseDate1.isBefore(localDate)){
             throw new ValidationException("дата reliaseDate раньше 28 декабря 1895 г.");
         }
-        if(duration.compareTo(Duration.ZERO) != 1){
+        } catch (DateTimeParseException ex){
+            throw new ValidationException("ошибка при парсинге даты");
+        }
+        if (duration <= 0) {
             throw new ValidationException("продолжительность фильма duration должна быть положительной");
         }
         return true;

@@ -1,16 +1,16 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
-import lombok.NonNull;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 @Data
 public class User {
+    private static int  index = 1;
     private int id;
     @NotEmpty
     @Email
@@ -18,11 +18,10 @@ public class User {
     @NotEmpty
     private String login;
     private String name;
-    @Past
-    private LocalDateTime birthday;
+    private String birthday;
 
-    public User(int id, @NotEmpty String email, @NotEmpty String login, String name, LocalDateTime birthday) {
-        this.id = id;
+    public User(@NotEmpty String email, @NotEmpty String login, String name, String birthday) {
+        id = index++;
         this.email = email;
         this.login = login;
         this.name = name;
@@ -30,17 +29,22 @@ public class User {
     }
 
     public boolean validation() throws ValidationException {
+        if(name.equals("") || name.trim().equals("") ) {
+            name = login;
+        }
         if(email.equals("") || email.trim().equals("") || !email.contains("@")) {
             throw new ValidationException("электронная почта не может быть пустой и должна содержать символ @");
         }
         if(login.equals("") || login.trim().equals("") || login.contains(" ")) {
             throw new ValidationException("логин не может быть пустым и содержать пробелы");
         }
-        if(name.equals("") || name.trim().equals("") ) {
-            name = login;
-        }
-        if (birthday.isAfter(LocalDateTime.now())) {
-            throw new ValidationException("дата рождения birthday не может быть в будущем");
+        try {
+            LocalDate localDate = LocalDate.parse(birthday);
+            if (localDate.isAfter(LocalDate.now())) {
+                throw new ValidationException("дата рождения birthday не может быть в будущем");
+            }
+        } catch (DateTimeParseException ex) {
+            throw new ValidationException("");
         }
         return true;
     }

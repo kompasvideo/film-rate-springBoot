@@ -5,7 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import java.time.LocalDateTime;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,9 +18,9 @@ class UserControllerTests {
     @Test
     public void shouldPostUserAndGetAllUsers() {
         UserController userController = new UserController();
-        User user1 = new User(1,"name1@mail.ru","name1","name1", LocalDateTime.of(2000,1,15,0,0));
+        User user1 = new User("name1@mail.ru","name1","name1", "2000-01-15");
         userController.create(user1);
-        User user2 = new User(2,"name2@yandex.ru","name2","name2", LocalDateTime.of(1999,2,2,0,0));
+        User user2 = new User("name2@yandex.ru","name2","name2", "1999-02-02");
         userController.create(user2);
         List<User> users = userController.findAll();
         assertEquals(2, users.size());
@@ -48,21 +47,24 @@ class UserControllerTests {
      * UserController проверка на PATCH запрос
      */
     @Test
-    public void shouldPatchUserAndReturnPatchedUser() {
+    public void shouldPatchUserAndReturnPutUser() {
         UserController userController = new UserController();
-        User user1 = new User(1, "name1@mail.ru", "name1", "name1", LocalDateTime.of(2000, 1, 15, 0, 0));
+        User user1 = new User( "name1@mail.ru", "name1", "name1", "2000-01-15");
         userController.create(user1);
-        User user2 = new User(1, "name2@yandex.ru", "name2", "name2", LocalDateTime.of(1999, 2, 2, 0, 0));
-        userController.patch(user2);
+        user1.setEmail("name2@yandex.ru");
+        user1.setLogin("name2");
+        user1.setName("name2");
+        user1.setBirthday("1999-02-02");
+        userController.put(user1);
         List<User> users = userController.findAll();
         assertEquals(1, users.size());
         for (User user : users) {
             if (user.getId() == user1.getId()) {
                 assertAll(
-                        () -> assertEquals(user.getEmail(), user2.getEmail()),
-                        () -> assertEquals(user.getLogin(), user2.getLogin()),
-                        () -> assertEquals(user.getName(), user2.getName()),
-                        () -> assertEquals(user.getBirthday(), user2.getBirthday())
+                        () -> assertEquals(user.getEmail(), user1.getEmail()),
+                        () -> assertEquals(user.getLogin(), user1.getLogin()),
+                        () -> assertEquals(user.getName(), user1.getName()),
+                        () -> assertEquals(user.getBirthday(), user1.getBirthday())
                 );
             }
         }
@@ -73,7 +75,7 @@ class UserControllerTests {
         final ValidationException exception = assertThrows(
                 ValidationException.class,
                 () -> {
-                    User user = new User(1,"","name1","name1", LocalDateTime.of(2000,1,15,0,0));
+                    User user = new User("","name1","name1", "2000-01-15");
                     user.validation();
                 });
         assertEquals("электронная почта не может быть пустой и должна содержать символ @", exception.getMessage());
@@ -84,7 +86,7 @@ class UserControllerTests {
         final ValidationException exception = assertThrows(
                 ValidationException.class,
                 () -> {
-                    User user = new User(1,"name1yandex.ru","name1","name1", LocalDateTime.of(2000,1,15,0,0));
+                    User user = new User("name1yandex.ru","name1","name1", "2000-01-15");
                     user.validation();
                 });
         assertEquals("электронная почта не может быть пустой и должна содержать символ @", exception.getMessage());
@@ -95,7 +97,7 @@ class UserControllerTests {
         final ValidationException exception = assertThrows(
                 ValidationException.class,
                 () -> {
-                    User user = new User(1,"name1@yandex.ru","","name1", LocalDateTime.of(2000,1,15,0,0));
+                    User user = new User("name1@yandex.ru","","name1", "2000-01-15");
                     user.validation();
                 });
         assertEquals("логин не может быть пустым и содержать пробелы", exception.getMessage());
@@ -106,7 +108,7 @@ class UserControllerTests {
         final ValidationException exception = assertThrows(
                 ValidationException.class,
                 () -> {
-                    User user = new User(1,"name1@yandex.ru","n ame1","name1", LocalDateTime.of(2000,1,15,0,0));
+                    User user = new User("name1@yandex.ru","n ame1","name1", "2000-01-15");
                     user.validation();
                 });
         assertEquals("логин не может быть пустым и содержать пробелы", exception.getMessage());
@@ -115,7 +117,7 @@ class UserControllerTests {
     @Test
     public void shouldThrowExceptionNameEmpty() {
         try {
-            User user = new User(1,"name1@yandex.ru","name1","", LocalDateTime.of(2000,1,15,0,0));
+            User user = new User("name1@yandex.ru","name1","", "2000-01-15");
             user.validation();
             assertEquals( user.getName(), user.getLogin());
         } catch (ValidationException ex) {}
@@ -126,7 +128,7 @@ class UserControllerTests {
         final ValidationException exception = assertThrows(
                 ValidationException.class,
                 () -> {
-                    User user = new User(1,"name1@yandex.ru","name1","name1", LocalDateTime.of(2023,1,15,0,0));
+                    User user = new User("name1@yandex.ru","name1","name1", "2023-01-15");
                     user.validation();
                 });
         assertEquals("дата рождения birthday не может быть в будущем", exception.getMessage());
