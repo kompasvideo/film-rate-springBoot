@@ -32,6 +32,9 @@ public class Film {
         if(name.equals("") || name.trim().equals("")) {
             throw new ValidationException("название не может быть пустым");
         }
+        if(description.equals("") || description.trim().equals("")) {
+            throw new ValidationException("description не может быть пустым");
+        }
         if (description.length() > 200) {
             throw new ValidationException("длина description больше 200 символов");
         }

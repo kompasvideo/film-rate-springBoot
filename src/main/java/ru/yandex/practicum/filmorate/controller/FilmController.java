@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -30,6 +32,9 @@ public class FilmController {
         }
         catch (ValidationException ex) {
             log.debug("Ошибка при валидации: {}", ex.getMessage());
+            //ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
+            //throw new ForbiddenException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
         }
         return film;
     }
@@ -50,6 +55,7 @@ public class FilmController {
         }
         catch (ValidationException ex) {
             log.debug("Ошибка при валидации: {}", ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
         }
         return film;
     }
