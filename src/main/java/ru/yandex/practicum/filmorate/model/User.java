@@ -1,10 +1,10 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -28,14 +28,17 @@ public class User {
         this.birthday = birthday;
     }
 
-    public boolean validation() throws ValidationException {
-        if(name.equals("") || name.trim().equals("") ) {
+    public boolean validate() throws ValidationException {
+        if(!StringUtils.hasText(name)) {
             name = login;
         }
-        if(email.equals("") || email.trim().equals("") || !email.contains("@")) {
+        if(!StringUtils.hasText(email) || !email.contains("@")) {
             throw new ValidationException("электронная почта не может быть пустой и должна содержать символ @");
         }
-        if(login.equals("") || login.trim().equals("") || login.contains(" ")) {
+        if(!StringUtils.hasText(login)) {
+            throw new ValidationException("логин не может быть пустым и содержать пробелы");
+        }
+        if(login.contains(" ")) {
             throw new ValidationException("логин не может быть пустым и содержать пробелы");
         }
         try {

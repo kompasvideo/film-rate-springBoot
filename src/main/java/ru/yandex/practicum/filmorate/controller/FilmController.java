@@ -26,14 +26,12 @@ public class FilmController {
     @PostMapping(value = "/films")
     public Film create(@Valid @RequestBody Film film) {
         try {
-            film.validation();
+            film.validate();
             films.add(film);
             log.info("Добавлена запись о фильме: {}", film);
         }
         catch (ValidationException ex) {
             log.debug("Ошибка при валидации: {}", ex.getMessage());
-            //ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
-            //throw new ForbiddenException();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
         }
         return film;
@@ -44,7 +42,7 @@ public class FilmController {
         try {
             for (Film lFilm: films) {
                 if(lFilm.getId() == film.getId()) {
-                    film.validation();
+                    film.validate();
                     lFilm.setName(film.getName());
                     lFilm.setDescription(film.getDescription());
                     lFilm.setReleaseDate(film.getReleaseDate());

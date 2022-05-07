@@ -77,7 +77,7 @@ class FilmControllerTests {
 				ValidationException.class,
 				() -> {
 					Film film = new Film("","duration", "2018-01-01", 90);
-					film.validation();
+					film.validate();
 				});
 		assertEquals("название не может быть пустым", exception.getMessage());
 	}
@@ -90,7 +90,7 @@ class FilmControllerTests {
 					Film film = new Film("name1",
 							"durationaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 							"2018-01-01", 90);
-					film.validation();
+					film.validate();
 				});
 		assertEquals("длина description больше 200 символов", exception.getMessage());
 	}
@@ -102,7 +102,7 @@ class FilmControllerTests {
 				() -> {
 					Film film = new Film("name1","description",
 							"1888-01-01", 90);
-					film.validation();
+					film.validate();
 				});
 		assertEquals("дата reliaseDate раньше 28 декабря 1895 г.", exception.getMessage());
 	}
@@ -114,7 +114,7 @@ class FilmControllerTests {
 				() -> {
 					Film film = new Film("name1","description",
 							"2018-01-01", -90);
-					film.validation();
+					film.validate();
 				});
 		assertEquals("продолжительность фильма duration должна быть положительной", exception.getMessage());
 	}

@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -28,15 +28,15 @@ public class Film {
         this.duration = duration;
     }
 
-    public boolean validation() throws ValidationException {
-        if(name.equals("") || name.trim().equals("")) {
+    public boolean validate() throws ValidationException {
+        if(!StringUtils.hasText(name)) {
             throw new ValidationException("название не может быть пустым");
-        }
-        if(description.equals("") || description.trim().equals("")) {
-            throw new ValidationException("description не может быть пустым");
         }
         if (description.length() > 200) {
             throw new ValidationException("длина description больше 200 символов");
+        }
+        if(!StringUtils.hasText(description)) {
+            throw new ValidationException("description не может быть пустым");
         }
         LocalDate localDate = LocalDate.of(1895, Month.DECEMBER,28);
         try {

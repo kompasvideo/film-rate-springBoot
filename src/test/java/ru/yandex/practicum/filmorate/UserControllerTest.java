@@ -76,7 +76,7 @@ class UserControllerTests {
                 ValidationException.class,
                 () -> {
                     User user = new User("","name1","name1", "2000-01-15");
-                    user.validation();
+                    user.validate();
                 });
         assertEquals("электронная почта не может быть пустой и должна содержать символ @", exception.getMessage());
     }
@@ -87,7 +87,7 @@ class UserControllerTests {
                 ValidationException.class,
                 () -> {
                     User user = new User("name1yandex.ru","name1","name1", "2000-01-15");
-                    user.validation();
+                    user.validate();
                 });
         assertEquals("электронная почта не может быть пустой и должна содержать символ @", exception.getMessage());
     }
@@ -98,7 +98,7 @@ class UserControllerTests {
                 ValidationException.class,
                 () -> {
                     User user = new User("name1@yandex.ru","","name1", "2000-01-15");
-                    user.validation();
+                    user.validate();
                 });
         assertEquals("логин не может быть пустым и содержать пробелы", exception.getMessage());
     }
@@ -109,7 +109,7 @@ class UserControllerTests {
                 ValidationException.class,
                 () -> {
                     User user = new User("name1@yandex.ru","n ame1","name1", "2000-01-15");
-                    user.validation();
+                    user.validate();
                 });
         assertEquals("логин не может быть пустым и содержать пробелы", exception.getMessage());
     }
@@ -118,7 +118,7 @@ class UserControllerTests {
     public void shouldThrowExceptionNameEmpty() {
         try {
             User user = new User("name1@yandex.ru","name1","", "2000-01-15");
-            user.validation();
+            user.validate();
             assertEquals( user.getName(), user.getLogin());
         } catch (ValidationException ex) {}
     }
@@ -129,7 +129,7 @@ class UserControllerTests {
                 ValidationException.class,
                 () -> {
                     User user = new User("name1@yandex.ru","name1","name1", "2023-01-15");
-                    user.validation();
+                    user.validate();
                 });
         assertEquals("дата рождения birthday не может быть в будущем", exception.getMessage());
     }

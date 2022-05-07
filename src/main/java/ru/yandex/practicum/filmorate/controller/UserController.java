@@ -26,13 +26,13 @@ public class UserController {
     @PostMapping(value = "/users")
     public User create(@Valid @RequestBody User user) {
         try {
-            user.validation();
+            user.validate();
             users.add(user);
             log.info("Новый пользователь: {}", user);
         }
         catch (ValidationException ex) {
             log.debug("Ошибка при валидации: {}", ex.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
         return user;
     }
@@ -42,7 +42,7 @@ public class UserController {
         try {
             for (User lUser: users) {
                 if(lUser.getId() == user.getId()) {
-                    user.validation();
+                    user.validate();
                     lUser.setEmail(user.getEmail());
                     lUser.setLogin(user.getLogin());
                     lUser.setName(user.getName());
