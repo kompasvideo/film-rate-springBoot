@@ -2,9 +2,14 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.yandex.practicum.filmorate.Service.FilmService;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import java.util.List;
 
@@ -18,7 +23,10 @@ class FilmControllerTests {
 	 */
 	@Test
 	public void shouldPostFilmAndGetAllFilms() {
-		FilmController filmController = new FilmController();
+		FilmStorage filmStorage = new InMemoryFilmStorage();
+		UserStorage userStorage = new InMemoryUserStorage();
+		FilmService filmService = new FilmService(filmStorage, userStorage);
+		FilmController filmController = new FilmController(filmStorage, filmService);
 		Film film1 = new Film("Name","duration", "2018-01-01", 90);
 	    filmController.create(film1);
 		Film film2 = new Film("Name2","duration2", "2020-02-02", 85);
@@ -49,7 +57,10 @@ class FilmControllerTests {
 	 */
 	@Test
 	public void shouldPatchFilmAndReturnPatchedFilm() {
-		FilmController filmController = new FilmController();
+		FilmStorage filmStorage = new InMemoryFilmStorage();
+		UserStorage userStorage = new InMemoryUserStorage();
+		FilmService filmService = new FilmService(filmStorage, userStorage);
+		FilmController filmController = new FilmController(filmStorage, filmService);
 		Film film1 = new Film("Name","description", "2018-01-01", 90);
 		filmController.create(film1);
 		film1.setName("Name2");
