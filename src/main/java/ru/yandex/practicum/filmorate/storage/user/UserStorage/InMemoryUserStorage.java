@@ -25,56 +25,35 @@ public class InMemoryUserStorage implements UserStorage {
         return users;
     }
 
-    public User create(User user) {
-        try {
-            user.validate();
-            users.add(user);
-            user.setId();
-            log.info("Новый пользователь: {}", user);
-        }
-        catch (ValidationException ex) {
-            log.debug("Ошибка при валидации: {}", ex.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
-        }
+    public User create(User user) throws ValidationException {
+        user.validate();
+        users.add(user);
+        user.setId();
+        log.info("Новый пользователь: {}", user);
         return user;
     }
 
-    public User put(User user) {
-        try {
-            boolean isFound = false;
-            for (User lUser: users) {
-                if(lUser.getId() == user.getId()) {
-                    user.validate();
-                    lUser.setEmail(user.getEmail());
-                    lUser.setLogin(user.getLogin());
-                    lUser.setName(user.getName());
-                    lUser.setBirthday(user.getBirthday());
-                    log.info("Обновлены данные пользователя: {}", user);
-                    isFound = true;
-                }
+    public User put(User user, Boolean isFound) throws ValidationException {
+        for (User lUser : users) {
+            if (lUser.getId() == user.getId()) {
+                user.validate();
+                lUser.setEmail(user.getEmail());
+                lUser.setLogin(user.getLogin());
+                lUser.setName(user.getName());
+                lUser.setBirthday(user.getBirthday());
+                log.info("Обновлены данные пользователя: {}", user);
+                isFound = true;
             }
-            if (! isFound) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id < 0");
-            }
-        }
-        catch (ValidationException ex) {
-            log.debug("Ошибка при валидации: {}", ex.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
         }
         return user;
     }
 
     public User userId(int id) {
-        for (User user: users) {
-            if (user.getId() == id){
+        for (User user : users) {
+            if (user.getId() == id) {
                 return user;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found id");
-    }
-
-    public Film film(int id) {
-
         return null;
     }
 }

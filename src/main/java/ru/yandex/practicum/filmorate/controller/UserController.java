@@ -19,53 +19,76 @@ import java.util.List;
 @RestController
 @Slf4j
 public class UserController {
-    private final UserStorage userStorage;
     private final UserService userService;
 
     @Autowired
-    public UserController(UserStorage userStorage, UserService userService) {
-        this.userStorage = userStorage;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/users")
     public List<User> findAll() {
-        return userStorage.findAll();
+        return userService.findAll();
     }
 
     @PostMapping(value = "/users")
     public User create(@Valid @RequestBody User user) {
-        return userStorage.create(user);
+        User lUser;
+        try {
+            lUser = userService.create(user);
+        } catch (ValidationException ex) {
+            log.debug("Ошибка при валидации: {}", ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+        return lUser;
     }
 
     @PutMapping(value = "/users")
     public User put(@Valid @RequestBody User user) {
-        return userStorage.put(user);
+        User lUser;
+        try {
+            Boolean isFound = false;
+            lUser = userService.put(user, isFound);
+            if (!isFound) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id < 0");
+            }
+        } catch (ValidationException ex) {
+            log.debug("Ошибка при валидации: {}", ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
+        }
+        return lUser;
     }
 
     /**
      * Получение user по id
+     *
      * @param id
      * @return
      */
     @GetMapping("/users/{id}")
     public User userId(@PathVariable int id) {
-        return userStorage.userId(id);
+        User user = userService.userId(id);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found id");
+        }
+        return user;
     }
 
     /**
      * добавление в друзья
+     *
      * @param id
      * @param friendId
      * @return
      */
     @PutMapping(value = "/users/{id}/friends/{friendId}")
     public void addFriends(@PathVariable int id, @PathVariable int friendId) {
-        userService.addFriend (id, friendId);
+        userService.addFriend(id, friendId);
     }
 
     /**
      * удаление из друзей
+     *
      * @param id
      * @param friendId
      */
@@ -76,6 +99,7 @@ public class UserController {
 
     /**
      * возвращаем список пользователей, являющихся его друзьями
+     *
      * @return
      */
     @GetMapping("/users/{id}/friends")
@@ -85,6 +109,7 @@ public class UserController {
 
     /**
      * список друзей, общих с другим пользователем
+     *
      * @return
      */
     @GetMapping("/users/{id}/friends/common/{otherId}")

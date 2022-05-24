@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -80,5 +83,21 @@ public class UserService {
             }
         }
         return jointFriends;
+    }
+
+    public List<User> findAll() {
+        return userStorage.findAll();
+    }
+
+    public User create(User user) throws ValidationException {
+        return userStorage.create(user);
+    }
+
+    public User put(User user, Boolean isFound) throws ValidationException {
+        return userStorage.put(user, isFound);
+    }
+
+    public User userId(int id) {
+        return userStorage.userId(id);
     }
 }

@@ -22,34 +22,56 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorag
 @RestController
 @Slf4j
 public class FilmController {
-    private final FilmStorage filmStorage;
     private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmStorage filmStorage, FilmService filmService) {
-        this.filmStorage = filmStorage;
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
 
 
     @GetMapping("/films")
     public List<Film> findAll() {
-        return filmStorage.findAll();
+        return filmService.findAll();
     }
 
     @PostMapping(value = "/films")
     public Film create(@Valid @RequestBody Film film) {
-        return filmStorage.create(film);
+        Film lFilm;
+        try {
+            lFilm = filmService.create(film);
+        }
+        catch (ValidationException ex) {
+            log.debug("Ошибка при валидации: {}", ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
+        }
+        return lFilm;
     }
 
     @PutMapping(value = "/films")
     public Film put(@Valid @RequestBody Film film) {
-        return filmStorage.put(film);
+        Film lFilm;
+        Boolean isFound = false;
+        try {
+            lFilm = filmService.put(film, isFound);
+            if (! isFound) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id < 0");
+            }
+        }
+        catch (ValidationException ex) {
+            log.debug("Ошибка при валидации: {}", ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
+        }
+        return lFilm;
     }
 
     @GetMapping("/films/{id}")
     public Film film(@PathVariable int id) {
-        return filmStorage.film(id);
+        Film film = filmService.film(id);
+        if (film == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "mot found");
+        }
+        return film;
     }
 
     /**

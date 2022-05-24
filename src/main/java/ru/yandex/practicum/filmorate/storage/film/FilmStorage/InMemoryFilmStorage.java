@@ -19,23 +19,15 @@ public class InMemoryFilmStorage  implements FilmStorage {
         return films;
     }
 
-    public Film create( Film film) {
-        try {
-            film.validate();
-            films.add(film);
-            film.setId();
-            log.info("Добавлена запись о фильме: {}", film);
-        }
-        catch (ValidationException ex) {
-            log.debug("Ошибка при валидации: {}", ex.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
-        }
+    public Film create( Film film) throws ValidationException {
+        film.validate();
+        films.add(film);
+        film.setId();
+        log.info("Добавлена запись о фильме: {}", film);
         return film;
     }
 
-    public Film put(Film film) {
-        try {
-            boolean isFound = false;
+    public Film put(Film film, Boolean isFound) throws ValidationException {
             for (Film lFilm: films) {
                 if(lFilm.getId() == film.getId()) {
                     film.validate();
@@ -47,14 +39,6 @@ public class InMemoryFilmStorage  implements FilmStorage {
                     isFound = true;
                 }
             }
-            if (! isFound) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id < 0");
-            }
-        }
-        catch (ValidationException ex) {
-            log.debug("Ошибка при валидации: {}", ex.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
-        }
         return film;
     }
 
@@ -100,6 +84,6 @@ public class InMemoryFilmStorage  implements FilmStorage {
                 return film;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "mot found");
+        return null;
     }
 }

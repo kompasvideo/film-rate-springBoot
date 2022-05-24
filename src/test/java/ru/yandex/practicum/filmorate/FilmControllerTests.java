@@ -26,7 +26,7 @@ class FilmControllerTests {
 		FilmStorage filmStorage = new InMemoryFilmStorage();
 		UserStorage userStorage = new InMemoryUserStorage();
 		FilmService filmService = new FilmService(filmStorage, userStorage);
-		FilmController filmController = new FilmController(filmStorage, filmService);
+		FilmController filmController = new FilmController(filmService);
 		Film film1 = new Film("Name","duration", "2018-01-01", 90);
 	    filmController.create(film1);
 		Film film2 = new Film("Name2","duration2", "2020-02-02", 85);
@@ -60,7 +60,7 @@ class FilmControllerTests {
 		FilmStorage filmStorage = new InMemoryFilmStorage();
 		UserStorage userStorage = new InMemoryUserStorage();
 		FilmService filmService = new FilmService(filmStorage, userStorage);
-		FilmController filmController = new FilmController(filmStorage, filmService);
+		FilmController filmController = new FilmController(filmService);
 		Film film1 = new Film("Name","description", "2018-01-01", 90);
 		filmController.create(film1);
 		film1.setName("Name2");

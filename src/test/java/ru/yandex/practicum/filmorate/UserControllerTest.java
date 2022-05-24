@@ -23,7 +23,7 @@ class UserControllerTests {
     public void shouldPostUserAndGetAllUsers() {
         UserStorage userStorage = new InMemoryUserStorage();
         UserService userService = new UserService(userStorage);
-        UserController userController = new UserController(userStorage, userService);
+        UserController userController = new UserController(userService);
         User user1 = new User("name1@mail.ru","name1","name1", "2000-01-15");
         userController.create(user1);
         User user2 = new User("name2@yandex.ru","name2","name2", "1999-02-02");
@@ -56,7 +56,7 @@ class UserControllerTests {
     public void shouldPatchUserAndReturnPutUser() {
         UserStorage userStorage = new InMemoryUserStorage();
         UserService userService = new UserService(userStorage);
-        UserController userController = new UserController(userStorage, userService);
+        UserController userController = new UserController(userService);
         User user1 = new User( "name1@mail.ru", "name1", "name1", "2000-01-15");
         userController.create(user1);
         user1.setEmail("name2@yandex.ru");

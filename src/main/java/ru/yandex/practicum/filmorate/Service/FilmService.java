@@ -2,11 +2,14 @@ package ru.yandex.practicum.filmorate.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -53,5 +56,21 @@ public class FilmService {
         Collection<Film> col = filmStorage.listLikes(count);
         List<Film> films = new ArrayList<>(col);
         return films;
+    }
+
+    public List<Film> findAll() {
+        return filmStorage.findAll();
+    }
+
+    public Film create(Film film) throws ValidationException {
+        return filmStorage.create(film);
+    }
+
+    public Film put( Film film, Boolean isFound) throws ValidationException {
+        return filmStorage.put(film, isFound);
+    }
+
+    public Film film( int id) {
+        return filmStorage.film(id);
     }
 }
