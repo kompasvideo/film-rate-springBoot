@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -8,15 +9,10 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.Service.FilmService;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.FilmResult;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorage;
 
 @Validated
 @RestController
@@ -50,11 +46,11 @@ public class FilmController {
 
     @PutMapping(value = "/films")
     public Film put(@Valid @RequestBody Film film) {
-        Film lFilm;
-        Boolean isFound = false;
+        FilmResult lFilm;
         try {
-            lFilm = filmService.put(film, isFound);
-            if (! isFound) {
+            Boolean isFound = false;
+            lFilm = filmService.put(film);
+            if (! lFilm.isResult()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id < 0");
             }
         }
@@ -62,7 +58,7 @@ public class FilmController {
             log.debug("Ошибка при валидации: {}", ex.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
         }
-        return lFilm;
+        return lFilm.getFilm();
     }
 
     @GetMapping("/films/{id}")

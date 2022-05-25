@@ -1,12 +1,10 @@
 package ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
+import ru.yandex.practicum.filmorate.model.FilmResult;
 
 import java.util.*;
 
@@ -27,7 +25,8 @@ public class InMemoryFilmStorage  implements FilmStorage {
         return film;
     }
 
-    public Film put(Film film, Boolean isFound) throws ValidationException {
+    public FilmResult put(Film film) throws ValidationException {
+        boolean isFound = false;
             for (Film lFilm: films) {
                 if(lFilm.getId() == film.getId()) {
                     film.validate();
@@ -39,7 +38,8 @@ public class InMemoryFilmStorage  implements FilmStorage {
                     isFound = true;
                 }
             }
-        return film;
+            FilmResult filmResult = new FilmResult(film, isFound);
+        return filmResult;
     }
 
     public Film getFilm(int filmId){

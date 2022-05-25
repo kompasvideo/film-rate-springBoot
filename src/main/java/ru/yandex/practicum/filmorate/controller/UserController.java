@@ -9,10 +9,9 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.Service.UserService;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
+import ru.yandex.practicum.filmorate.model.UserResult;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Validated
@@ -45,23 +44,24 @@ public class UserController {
 
     @PutMapping(value = "/users")
     public User put(@Valid @RequestBody User user) {
-        User lUser;
+        UserResult lUser;
         try {
             Boolean isFound = false;
-            lUser = userService.put(user, isFound);
-            if (!isFound) {
+            lUser = userService.put(user);
+            if (! lUser.isResult()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id < 0");
             }
         } catch (ValidationException ex) {
             log.debug("Ошибка при валидации: {}", ex.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cause description here");
         }
-        return lUser;
+        return lUser.getUser();
     }
+
+
 
     /**
      * Получение user по id
-     *
      * @param id
      * @return
      */
@@ -74,12 +74,9 @@ public class UserController {
         return user;
     }
 
+
     /**
      * добавление в друзья
-     *
-     * @param id
-     * @param friendId
-     * @return
      */
     @PutMapping(value = "/users/{id}/friends/{friendId}")
     public void addFriends(@PathVariable int id, @PathVariable int friendId) {
@@ -88,7 +85,6 @@ public class UserController {
 
     /**
      * удаление из друзей
-     *
      * @param id
      * @param friendId
      */
@@ -109,7 +105,8 @@ public class UserController {
 
     /**
      * список друзей, общих с другим пользователем
-     *
+     * @param id
+     * @param otherId
      * @return
      */
     @GetMapping("/users/{id}/friends/common/{otherId}")

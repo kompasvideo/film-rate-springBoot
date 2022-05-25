@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.UserResult;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -33,7 +34,8 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    public User put(User user, Boolean isFound) throws ValidationException {
+    public UserResult put(User user) throws ValidationException {
+        boolean isFound = false;
         for (User lUser : users) {
             if (lUser.getId() == user.getId()) {
                 user.validate();
@@ -45,7 +47,8 @@ public class InMemoryUserStorage implements UserStorage {
                 isFound = true;
             }
         }
-        return user;
+        UserResult userResult = new UserResult(user, isFound);
+        return userResult;
     }
 
     public User userId(int id) {

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.UserResult;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 
 import javax.validation.Valid;
@@ -93,8 +94,8 @@ public class UserService {
         return userStorage.create(user);
     }
 
-    public User put(User user, Boolean isFound) throws ValidationException {
-        return userStorage.put(user, isFound);
+    public UserResult put(User user) throws ValidationException {
+        return userStorage.put(user);
     }
 
     public User userId(int id) {
