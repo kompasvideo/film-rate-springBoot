@@ -80,7 +80,10 @@ public class UserController {
      */
     @PutMapping(value = "/users/{id}/friends/{friendId}")
     public void addFriends(@PathVariable int id, @PathVariable int friendId) {
-        userService.addFriend(id, friendId);
+        boolean result = userService.addFriend(id, friendId);
+        if (!result){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found id");
+        }
     }
 
     /**

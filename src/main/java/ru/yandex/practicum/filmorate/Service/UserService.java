@@ -30,11 +30,15 @@ public class UserService {
      * @param userId
      * @param friendId
      */
-    public void addFriend(int userId, int friendId) {
+    public boolean addFriend(int userId, int friendId) {
         User user = userStorage.userId(userId);
         User friend = userStorage.userId(friendId);
+        if (friend == null) {
+            return false;
+        }
         user.addFriend(friendId);
         friend.addFriend(userId);
+        return true;
     }
 
     /**
