@@ -53,9 +53,10 @@ public class Film {
         }
         return true;
     }
+<<<<<<< HEAD
 
     /**
-     * пользователь ставит лайк фильму
+     * Пользователь ставит лайк фильму
      * @param userId
      */
     public void addLike(int userId){
@@ -63,7 +64,7 @@ public class Film {
     }
 
     /**
-     * пользователь удаляет лайк
+     * Пользователь удаляет лайк
      * @param userId
      */
     public void deleteLike(int userId){
@@ -71,7 +72,7 @@ public class Film {
     }
 
     /**
-     * возвраящяет количество лайков
+     * Возвраящяет количество лайков
      * @return
      */
     public int countLikes(){
@@ -81,4 +82,6 @@ public class Film {
     public void setId(){
         id = index++;
     }
+=======
+>>>>>>> dea2a3044115533bd27621b3ea23d4f10aa1e110
 }
