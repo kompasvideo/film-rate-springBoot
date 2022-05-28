@@ -17,6 +17,7 @@ public class Film {
     private int id;
     @NotEmpty
     private String name;
+
     @Size(max = 200)
     private String description;
     private String releaseDate;
@@ -57,7 +58,7 @@ public class Film {
     }
 
     /**
-     * пользователь ставит лайк фильму
+     * Пользователь ставит лайк фильму
      * @param userId
      */
     public void addLike(int userId){
@@ -65,7 +66,7 @@ public class Film {
     }
 
     /**
-     * пользователь удаляет лайк
+     * Пользователь удаляет лайк
      * @param userId
      */
     public void deleteLike(int userId){
@@ -73,7 +74,7 @@ public class Film {
     }
 
     /**
-     * возвраящяет количество лайков
+     * Возвраящяет количество лайков
      * @return
      */
     public int countLikes(){
