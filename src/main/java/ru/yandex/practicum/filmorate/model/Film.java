@@ -8,6 +8,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeParseException;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class Film {
@@ -15,14 +17,14 @@ public class Film {
     private int id;
     @NotEmpty
     private String name;
-
     @Size(max = 200)
     private String description;
     private String releaseDate;
     private int duration;
 
+    private Set<Integer> likes = new HashSet<>();
+
     public Film(@NotEmpty String name, String description, String releaseDate, int duration) {
-        this.id = index++;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
