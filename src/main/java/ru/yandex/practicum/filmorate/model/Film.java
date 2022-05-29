@@ -44,9 +44,9 @@ public class Film {
         LocalDate localDate = LocalDate.of(1895, Month.DECEMBER,28);
         try {
             LocalDate reliaseDate1 =LocalDate.parse(releaseDate);
-        if (reliaseDate1.isBefore(localDate)){
-            throw new ValidationException("дата reliaseDate раньше 28 декабря 1895 г.");
-        }
+            if (reliaseDate1.isBefore(localDate)){
+                throw new ValidationException("дата reliaseDate раньше 28 декабря 1895 г.");
+            }
         } catch (DateTimeParseException ex){
             throw new ValidationException("ошибка при парсинге даты");
         }
