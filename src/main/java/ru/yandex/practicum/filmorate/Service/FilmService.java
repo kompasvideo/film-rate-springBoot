@@ -41,10 +41,12 @@ public class FilmService {
      * @param filmId
      * @param userId
      */
-    public void deleteLike(int filmId, int userId){
+    public boolean deleteLike(int filmId, int userId){
         Film film = filmStorage.getFilm(filmId);
         User user = userStorage.userId(userId);
+        if (user == null) return false;
         film.deleteLike(userId);
+        return true;
     }
 
     /**

@@ -87,7 +87,9 @@ public class FilmController {
      */
     @DeleteMapping(value = "/films/{id}/like/{userId}")
     public void deleteLike(@PathVariable int id, @PathVariable int userId) {
-        filmService.deleteLike(id,userId);
+        if (! filmService.deleteLike(id,userId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "mot found");
+        }
     }
 
     @GetMapping(value = "/films/popular")
