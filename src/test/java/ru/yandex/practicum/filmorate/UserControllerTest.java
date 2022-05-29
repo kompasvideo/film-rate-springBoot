@@ -2,9 +2,13 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.yandex.practicum.filmorate.Service.UserService;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
+
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +21,9 @@ class UserControllerTests {
      */
     @Test
     public void shouldPostUserAndGetAllUsers() {
-        UserController userController = new UserController();
+        UserStorage userStorage = new InMemoryUserStorage();
+        UserService userService = new UserService(userStorage);
+        UserController userController = new UserController(userService);
         User user1 = new User("name1@mail.ru","name1","name1", "2000-01-15");
         userController.create(user1);
         User user2 = new User("name2@yandex.ru","name2","name2", "1999-02-02");
@@ -48,7 +54,9 @@ class UserControllerTests {
      */
     @Test
     public void shouldPatchUserAndReturnPutUser() {
-        UserController userController = new UserController();
+        UserStorage userStorage = new InMemoryUserStorage();
+        UserService userService = new UserService(userStorage);
+        UserController userController = new UserController(userService);
         User user1 = new User( "name1@mail.ru", "name1", "name1", "2000-01-15");
         userController.create(user1);
         user1.setEmail("name2@yandex.ru");
