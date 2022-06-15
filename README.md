@@ -1,2 +1,2 @@
 # java-filmorate
-Template repository for Filmorate project.
+![Схема БД](/../add-friends-likes/Схема БД.png)
