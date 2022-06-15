@@ -1,2 +1,3 @@
 # java-filmorate
-Template repository for Filmorate project.
+ветка - add-friends-likes
+файл схемы БД - Схема БД.png
