@@ -1,6 +1,6 @@
 # java-filmorate
 ![Схема БД](/../add-friends-likes/Схема_БД.png)
-
+```
 Получение всех пользователей
 SELECT login,
         name,
@@ -28,3 +28,4 @@ SELECT  name,
         mpa
 FROM film
 WHERE film_id = 1;
+```
