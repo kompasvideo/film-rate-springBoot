@@ -12,7 +12,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class Film {
+public class
+
+Film {
     private static int  index = 1;
     private int id;
     @NotEmpty
