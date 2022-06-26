@@ -23,7 +23,7 @@ public class InMemoryUserStorage implements UserStorage {
             return false;
         }
         users.put(user.getId(), user);
-        log.info(String.format("Пользователь %s успешно добавлен", user));
+        log.info("Пользователь {} успешно добавлен", user);
         return true;
     }
 
@@ -33,7 +33,7 @@ public class InMemoryUserStorage implements UserStorage {
             return false;
         }
         users.put(user.getId(), user);
-        log.info(String.format("Пользователь %s успешно обновлен", user));
+        log.info("Пользователь {} успешно обновлен", user);
         return true;
     }
 

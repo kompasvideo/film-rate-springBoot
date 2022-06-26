@@ -34,7 +34,7 @@ public class FilmService {
      */
     public void addLike(int filmId, int userId) {
         getFilmToId(filmId);
-        getUserToId(userId);
+        getUserById(userId);
 
         filmStorage.insertLike(filmId, userId);
     }
@@ -46,7 +46,7 @@ public class FilmService {
      */
     public void deleteLike(int id, int userId) {
         getFilmToId(id);
-        getUserToId(userId);
+        getUserById(userId);
 
         filmStorage.deleteLike(id, userId);
     }
@@ -95,7 +95,7 @@ public class FilmService {
     }
 
     public Mpa getMpa(int mpaId) {
-        Optional<Mpa> mpa = filmStorage.getMpaForId(mpaId);
+        Optional<Mpa> mpa = filmStorage.getMpaById(mpaId);
         if (mpa.isEmpty()) {
             throw new NotFoundException("Нет такого id mpa:" + mpaId);
         }
@@ -134,18 +134,11 @@ public class FilmService {
 
     public Film getFilmToId(int filmId) {
         Optional<Film> film = filmStorage.getFilm(filmId);
-        if (film.isEmpty()) {
-            throw new NotFoundException("Фильм не найден с id " + filmId);
-        }
-
-        return film.get();
+        return film.orElseThrow(() -> new NotFoundException("Фильм не найден с id " + filmId));
     }
 
-    public User getUserToId(int userId) {
+    public User getUserById(int userId) {
         Optional<User> user = userStorage.userId(userId);
-        if (user.isEmpty()) {
-            throw new NotFoundException("User не найден с id:" + userId);
-        }
-        return user.get();
+        return user.orElseThrow(() -> new NotFoundException("User не найден с id:" + userId));
     }
 }
