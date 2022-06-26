@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.*;
 
 @Data
 public class User {
@@ -20,8 +21,9 @@ public class User {
     private String name;
     private String birthday;
 
+    Set<Integer> friends = new HashSet<>();
+
     public User(@NotEmpty String email, @NotEmpty String login, String name, String birthday) {
-        id = index++;
         this.email = email;
         this.login = login;
         this.name = name;
@@ -50,5 +52,32 @@ public class User {
             throw new ValidationException("");
         }
         return true;
+    }
+
+    /**
+     * Добавить друга по id
+     * @param friendId
+     */
+    public void addFriend(int friendId){
+        friends.add(friendId);
+    }
+
+    /**
+     * удаление друга по id
+     * @param friendId
+     */
+    public void deleteFriend(int friendId){
+        friends.remove(friendId);
+    }
+
+    /**
+     * возвращаем список пользователей, являющихся его друзьями
+     * @return
+     */
+    public Collection<Integer> listFriends(){
+        return friends;
+    }
+    public void setId(){
+        id = index++;
     }
 }
