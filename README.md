@@ -1,19 +1,19 @@
 # java-filmorate
-![Схема БД](/Схема_БД.png)
+![Схема БД](/../add-friends-likes/Схема_БД.png)
 ```
 Получение всех пользователей
 SELECT login,
         name,
         email,
-        birthDay
-FROM users;
+        birthday
+FROM user;
 
 Получение пользователя с id = 2
 SELECT login,
         name,
         email,
-        birthDay
-FROM users   
+        birthday
+FROM user   
 WHERE user_id = 2;
 
 Получение названий всех фильмов
