@@ -150,8 +150,8 @@ public class FilmDbStorage implements FilmStorage {
     public List<Genre> getListGenre(int filmId) {
         String sql = "SELECT g.id, g.name FROM film_genres fg LEFT JOIN genres g on fg.genre_id = g.id " +
             "WHERE fg.film_id=? ORDER BY g.id";
-        List<Genre> genreList = jdbcTemplate.query(sql, (rs, rowNum) -> buildGenre(rs, rowNum), filmId);
-        return genreList;
+        List<Genre> genreList = jdbcTemplate.query(sql, this:: buildGenre, filmId);
+        return genreList.size() == 0 ? null : genreList;
     }
 
     private Genre buildGenre(ResultSet row, int rowNum) throws SQLException {

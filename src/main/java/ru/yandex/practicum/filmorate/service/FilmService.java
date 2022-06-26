@@ -33,7 +33,7 @@ public class FilmService {
      * @param userId
      */
     public void addLike(int filmId, int userId) {
-        getFilmToId(filmId);
+        getFilmById(filmId);
         getUserById(userId);
 
         filmStorage.insertLike(filmId, userId);
@@ -45,7 +45,7 @@ public class FilmService {
      * @param userId
      */
     public void deleteLike(int id, int userId) {
-        getFilmToId(id);
+        getFilmById(id);
         getUserById(userId);
 
         filmStorage.deleteLike(id, userId);
@@ -66,7 +66,7 @@ public class FilmService {
         if (!filmStorage.create(film)) {
             throw new ValidationException("Фильм с таким id уже существует:"  + film.getName());
         }
-        return getFilmToId(film.getId());
+        return getFilmById(film.getId());
     }
 
     public Film put(Film film) {
@@ -75,11 +75,11 @@ public class FilmService {
         if (!filmStorage.put(film)) {
             throw new NotFoundException("Нет такого id: " + film.getName());
         }
-        return film.getGenres() != null && film.getGenres().size() == 0 ? film : getFilmToId(film.getId());
+        return film.getGenres() != null && film.getGenres().size() == 0 ? film : getFilmById(film.getId());
     }
 
     public Film film(int id) {
-        return getFilmToId(id);
+        return  getFilmById(id);
     }
 
 
@@ -132,13 +132,13 @@ public class FilmService {
         }
     }
 
-    public Film getFilmToId(int filmId) {
+    public Film getFilmById(int filmId) {
         Optional<Film> film = filmStorage.getFilm(filmId);
         return film.orElseThrow(() -> new NotFoundException("Фильм не найден с id " + filmId));
     }
 
     public User getUserById(int userId) {
         Optional<User> user = userStorage.userId(userId);
-        return user.orElseThrow(() -> new NotFoundException("User не найден с id:" + userId));
+        return user.orElseThrow(() ->  new NotFoundException("Нет usera с id:" + userId));
     }
 }
