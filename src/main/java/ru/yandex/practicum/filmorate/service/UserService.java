@@ -31,7 +31,7 @@ public class UserService {
         if (!userStorage.create(user)) {
             throw new ValidationException(String.format("Нет usera: %s", user.getName()));
         }
-        return getUserToId(user.getId());
+        return getUserById(user.getId());
     }
 
     public User putUser(User user) {
@@ -43,11 +43,11 @@ public class UserService {
         if (!userStorage.put(user)) {
             throw new NotFoundException(String.format("Нет usera: %s", user.getName()));
         }
-        return getUserToId(user.getId());
+        return getUserById(user.getId());
     }
 
     public User getUser(int id) {
-        return getUserToId(id);
+        return getUserById(id);
     }
 
     public List<User> findAll() {
@@ -55,15 +55,15 @@ public class UserService {
     }
 
     public void addFriend(int userId, int friendId) {
-        getUserToId(userId);
-        getUserToId(friendId);
+        getUserById(userId);
+        getUserById(friendId);
 
         userStorage.insertFriends(userId, friendId);
     }
 
     public void deleteFriend(int userId, int friendId) {
-        getUserToId(userId);
-        getUserToId(friendId);
+        getUserById(userId);
+        getUserById(friendId);
 
         userStorage.deleteFriends(userId, friendId);
     }
@@ -91,12 +91,9 @@ public class UserService {
         }
     }
 
-    public User getUserToId(int userId) {
-        Optional<User> user = userStorage.userId(userId);
-        if (user.isEmpty()) {
-            throw new NotFoundException("Нет usera с id:" + userId);
-        }
-        return user.get();
+    public User getUserById(int userId) {
+        Optional<User> user = userStorage.userById(userId);
+        return user.orElseThrow(() ->  new NotFoundException("Нет usera с id:" + userId));
     }
 }
 

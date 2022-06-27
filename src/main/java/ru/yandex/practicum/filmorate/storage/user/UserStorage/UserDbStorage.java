@@ -38,7 +38,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public Optional<User> userId(int userId) {
+    public Optional<User> userById(int userId) {
         try {
             String sql = "SELECT user_id, email, login, name, birthDay FROM users WHERE user_id=?";
             return Optional.of(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> buildUser(rs, rowNum), userId));

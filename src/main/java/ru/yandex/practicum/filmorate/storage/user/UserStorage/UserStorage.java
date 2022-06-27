@@ -9,5 +9,5 @@ public interface UserStorage {
     List<User> findAll();
     boolean create(User user);
     boolean put(User user);
-    Optional<User> userId(int id);
+    Optional<User> userById(int id);
 }

@@ -138,7 +138,7 @@ public class FilmService {
     }
 
     public User getUserById(int userId) {
-        Optional<User> user = userStorage.userId(userId);
+        Optional<User> user = userStorage.userById(userId);
         return user.orElseThrow(() ->  new NotFoundException("Нет usera с id:" + userId));
     }
 }
