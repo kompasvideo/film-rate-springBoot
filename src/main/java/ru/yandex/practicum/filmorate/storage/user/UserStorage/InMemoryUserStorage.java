@@ -1,62 +1,44 @@
 package ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.UserResult;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
-    private List<User> users = new ArrayList<>();
+    private final HashMap<Integer, User> users = new HashMap<>();
 
+    @Override
     public List<User> findAll() {
-        return users;
+        return new ArrayList<>(users.values());
     }
 
-    public User create(User user) throws ValidationException {
-        user.validate();
-        users.add(user);
-        user.setId();
-        log.info("Новый пользователь: {}", user);
-        return user;
-    }
-
-    public UserResult put(User user) throws ValidationException {
-        boolean isFound = false;
-        for (User lUser : users) {
-            if (lUser.getId() == user.getId()) {
-                user.validate();
-                lUser.setEmail(user.getEmail());
-                lUser.setLogin(user.getLogin());
-                lUser.setName(user.getName());
-                lUser.setBirthday(user.getBirthday());
-                log.info("Обновлены данные пользователя: {}", user);
-                isFound = true;
-            }
+    @Override
+    public boolean create(User user) {
+        if (users.containsKey(user.getId())) {
+            return false;
         }
-        UserResult userResult = new UserResult(user, isFound);
-        return userResult;
+        users.put(user.getId(), user);
+        log.info("Пользователь {} успешно добавлен", user);
+        return true;
     }
 
-    public User userId(int id) {
-        for (User user : users) {
-            if (user.getId() == id) {
-                return user;
-            }
+    @Override
+    public boolean put(User user) {
+        if (!users.containsKey(user.getId())) {
+            return false;
         }
-        return null;
+        users.put(user.getId(), user);
+        log.info("Пользователь {} успешно обновлен", user);
+        return true;
+    }
+
+    @Override
+    public Optional<User> userById(int id) {
+        return Optional.of(users.get(id));
     }
 }

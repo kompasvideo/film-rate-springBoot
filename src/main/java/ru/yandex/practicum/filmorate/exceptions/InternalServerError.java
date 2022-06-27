@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.exceptions;
 
-public class ValidationException extends RuntimeException {
-    public ValidationException(final String message) {
+public class InternalServerError extends RuntimeException {
+    public InternalServerError(final String message) {
         super(message);
     }
 
